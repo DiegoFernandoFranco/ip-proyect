@@ -1,16 +1,16 @@
 const express = require('express');
-const ip = require('ip');
+const requestIp = require('request-ip');
 
 const app = express();
 
-// Route to get the IP address of the user
-app.get('/ip', (req, res) => {
-  const ipAddress = ip.address();
-  res.send(ipAddress);
+app.use(requestIp.mw());
+
+app.get('/', (req, res) => {
+  const ip = req.clientIp;
+  res.send(`Your IP address is ${ip}`);
 });
 
-// Start the server
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
-  console.log(`Server listening on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });
